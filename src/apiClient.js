@@ -4,55 +4,57 @@ require("dotenv").config();
 const BASE_URL = process.env.API_URL;
 let token = null;
 
-// ✅ Ahora login acepta correo y contraseña como argumentos
+// Función de login
 async function login(correo, contrasenia) {
   try {
-    const response = await axios.post(`${BASE_URL}/api/usuarios`, {
-      correo,
-      contrasenia,
-    });
-
-    if (response.data && response.data.token) {
+    // Realiza la solicitud de login con correo y contraseña
+    const response = await axios.post(`${BASE_URL}/api/usuarios`, { correo, contrasenia });
+    if (response.data?.token) {
+      // Si el token es válido, lo almacena
       token = response.data.token;
       return token;
-    } else {
-      throw new Error("No se obtuvo un token válido.");
     }
+    throw new Error("No se obtuvo un token válido.");
   } catch (error) {
     console.error("Error en el login:", error.response?.data || error.message);
     throw new Error("Error al obtener el token.");
   }
 }
 
-// ✅ Si necesitas login automático con las credenciales del .env
+// Verificar que el login esté funcionando correctamente
 async function loginDefault() {
-  return login(process.env.API_USERNAME, process.env.API_PASSWORD);
-}
-
-async function apiRequest(method, endpoint, data = null, customToken = null) {
-  const authToken = customToken || token;
-
-  if (!authToken) {
-    console.log('Token no encontrado, intentando login...');
-    await loginDefault();
-  }
-
-  const config = {
-    headers: { Authorization: `Bearer ${authToken}` },
+    const token = await login(process.env.API_USERNAME, process.env.API_PASSWORD);
+    console.log("Token después de loginDefault:", token); // Verificar que el token se obtiene correctamente
+    return token;
   };
+  
 
-  console.log('Enviando solicitud a:', `${BASE_URL}${endpoint}`);
-  console.log('Datos enviados:', data);
-  console.log('Configuración de los headers:', config);
+// Función de login por defecto utilizando credenciales en el archivo .env
+async function apiRequest(method, endpoint, data = null, customToken = null) {
+    const authToken = customToken || token; // Usa el token del customToken si se pasa, o el token global
+    if (!authToken) {
+        const newToken = await loginDefault();
+        return apiRequest(method, endpoint, data, newToken);
+      }
 
-  try {
-    const response = await axios({ method, url: `${BASE_URL}${endpoint}`, data, ...config });
-    console.log('Respuesta de la API:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error en la solicitud:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Error al hacer la solicitud a la API");
-  }
+    try {
+      const response = await axios({
+        method,
+        url: `${BASE_URL}${endpoint}`,
+        data,
+        headers: { 'x-token': authToken }, // Enviar el token en la cabecera
+      });
+
+      if (response.data && Object.keys(response.data).length === 0) {
+        throw new Error("Respuesta vacía de la API");
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error("Error en la solicitud:", error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || "Error en la API");
+    }
 }
+
 
 module.exports = { login, loginDefault, apiRequest };

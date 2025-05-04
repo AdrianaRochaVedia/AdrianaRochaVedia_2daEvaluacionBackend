@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
 
 // Leer el archivo schema.graphql como texto
 const typeDefs = fs.readFileSync(path.join(__dirname, "./schema.graphql"), "utf8");
@@ -23,20 +24,19 @@ const server = new ApolloServer({
     };
   },
   context: ({ req }) => {
-    // Extraer el token de los headers de autorización
     const token = req.headers.authorization?.replace("Bearer ", "");
-    if (!token) return {};  // Si no hay token, no pasa nada.
-
+    console.log("Token recibido en el contexto:", token); // Verificar que el token está presente
+    if (!token) return {}; // Si no hay token, retorna un objeto vacío
+  
     try {
-      // Verificar el token usando la clave secreta
       const user = jwt.verify(token, process.env.JWT_SECRET);
-      // Solo pasamos el usuario y el token en el contexto, no se incluye req ni res
-      return { user, token };
+      return { user, token }; // Retorna el usuario y el token en el contexto
     } catch (err) {
-      // Si el token es inválido o hay algún error, retornamos un objeto vacío
-      return {};
+      console.error("Error al verificar el token:", err.message);
+      return {}; // Si el token no es válido, retorna un objeto vacío
     }
   },
+  
 });
 
 // Iniciar el servidor Apollo y configurar Express

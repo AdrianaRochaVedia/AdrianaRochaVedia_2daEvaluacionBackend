@@ -1,3 +1,9 @@
+type Usuario {
+  id_usuario: ID!
+  correo: String!
+  tipo: String
+}
+
 type Documento {
   id_documento: ID!
   nombre: String!
@@ -45,24 +51,72 @@ type VersionDocumento {
   usuario: Usuario
 }
 
-type Usuario {
-  id_usuario: ID!
-  correo: String!
-  tipo: String
-}
-
-
-
-type Mutation {
-  login(correo: String!, contrasenia: String!): AuthResponse
-  crearDocumento(nombre: String!, tipo: String!, descripcion: String!): Documento
-  actualizarDocumento(id: ID!, nombre: String, tipo: String, descripcion: String): Documento
-  eliminarDocumento(id: ID!): Boolean
-}
-
-
 type AuthResponse {
   token: String!
   usuario: Usuario!
 }
 
+type Query {
+  documentos: [Documento]
+  documento(id: ID!): Documento
+  documentosPorTipo(tipo: String!): [Documento]
+  documentosPorUsuario(usuarioId: ID!): [Documento]
+  documentosFavoritos(usuarioId: ID!): [Documento]
+  documentosMasVistos(limite: Int): [Documento]
+  versiones(documentoId: ID!): [VersionDocumento]
+  version(id: ID!): VersionDocumento
+  usuarios: [Usuario]
+  usuario(id: ID!): Usuario
+  reporteDocumentos: JSON
+  reporteDocumentosPorPeriodo(fechaInicio: String!, fechaFin: String!): JSON
+  reporteVersionesPorDocumento(documentoId: ID!): [VersionDocumento]
+  reporteActividad(usuarioId: ID!, fechaInicio: String!, fechaFin: String!): JSON
+  buscarDocumentosPorNombre(nombre: String!): [Documento]
+  buscarDocumentosPorPalabrasClave(palabras_clave: String!): [Documento]
+  buscarDocumentosPorTipo(tipo: String!): [Documento]
+  buscarDocumentosPorAnio(anio: Int!): [Documento]
+  buscarDocumentosPorFuente(fuente: String!): [Documento]
+  filtradoInteligente: [Documento]
+}
+
+scalar JSON
+
+type Mutation {
+  login(correo: String!, contrasenia: String!): AuthResponse
+  crearDocumento(
+    nombre: String!
+    tipo: String!
+    fuente_origen: String
+    descripcion: String
+    importancia: String
+    anio_publicacion: Int
+    enlace: String
+    alcance: String
+    concepto_basico: String
+    aplicacion: String
+    cpe: String
+    jerarquia: String
+    palabras_clave_procesadas: String
+  ): Documento
+
+  actualizarDocumento(
+    id: ID!
+    nombre: String
+    tipo: String
+    fuente_origen: String
+    descripcion: String
+    importancia: String
+    anio_publicacion: Int
+    enlace: String
+    alcance: String
+    concepto_basico: String
+    aplicacion: String
+    cpe: String
+    jerarquia: String
+    palabras_clave_procesadas: String
+  ): Documento
+
+  eliminarDocumento(id: ID!): Boolean
+  marcarComoFavorito(id: ID!): Documento
+  quitarDeFavoritos(id: ID!): Documento
+}
