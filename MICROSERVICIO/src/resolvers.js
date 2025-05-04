@@ -184,20 +184,24 @@ const resolvers = {
 
   Mutation: {
     login: async (_, { correo, contrasenia }) => {
+      const { login } = require("./apiClient"); // Importar la función de login
+      
       try {
-        const response = await apiRequest("post", "/api/auth/login", { correo, contrasenia });
-        const { token, uid } = response;
+        console.log("Intentando login con:", correo, contrasenia ? "[contraseña presente]" : "undefined");
         
-        const usuario = {
-          id_usuario: uid,
-          correo: correo,
-          tipo: "Administrador" //Esto se debe cambiar para el proyecto, solo es una prueba de los datos de la bd
-        };
+        // Llamar a la función login
+        const authResponse = await login(correo, contrasenia);
         
-        return { token, usuario };
+        // Verificar que el resultado tenga el formato esperado
+        if (!authResponse || !authResponse.token || !authResponse.usuario) {
+          throw new Error("Respuesta de autenticación inválida");
+        }
+        
+        console.log("Login exitoso para:", correo);
+        return authResponse;
       } catch (error) {
-        console.error("Error en login:", error);
-        throw new Error("Error en la autenticación");
+        console.error("Error en resolver login:", error.message);
+        throw new Error("Error de autenticación: " + error.message);
       }
     },
     

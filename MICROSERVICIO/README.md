@@ -51,7 +51,7 @@ Una vez el servidor se encuentre levantado, se puede acceder al GraphQL Playgrou
 En el body :  
     {  
 
-        "query": "mutation login($correo: String!, $contrasenia: String!) { login(correo: $correo, contrasenia: $contrasenia) { token } }",  
+        "query": " login($correo: String!, $contrasenia: String!) { login(correo: $correo, contrasenia: $contrasenia) { token } }",  
         "variables": {  
             "correo": "ejemplo1@correo.com",  
             "contrasenia": "claveSegura123"  
