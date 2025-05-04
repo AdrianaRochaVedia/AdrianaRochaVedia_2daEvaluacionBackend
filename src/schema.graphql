@@ -79,7 +79,6 @@ type Query {
   filtradoInteligente: [Documento]
 }
 
-scalar JSON
 
 type Mutation {
   login(correo: String!, contrasenia: String!): AuthResponse

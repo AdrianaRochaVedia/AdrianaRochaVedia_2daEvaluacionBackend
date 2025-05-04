@@ -11,7 +11,7 @@ app.use(express.json());
 
 const typeDefs = fs.readFileSync(path.join(__dirname, "./schema.graphql"), "utf8");
 
-// Crear el servidor Apollo
+// Crear el servidor Apollo 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -23,7 +23,7 @@ const server = new ApolloServer({
   },
   context: ({ req }) => {
     const token = req.headers.authorization?.replace("Bearer ", "");
-    //Verificacion del token
+    //Verifica que el token sea valido
     console.log("Token recibido en el contexto:", token); 
     if (!token) return {}; 
   
