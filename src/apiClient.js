@@ -10,7 +10,7 @@ async function login(correo, contrasenia) {
     // Realiza la solicitud de login con correo y contraseña
     const response = await axios.post(`${BASE_URL}/api/usuarios`, { correo, contrasenia });
     if (response.data?.token) {
-      // Si el token es válido, lo almacena
+      // almacenar el token en una variable global
       token = response.data.token;
       return token;
     }
@@ -24,14 +24,12 @@ async function login(correo, contrasenia) {
 // Verificar que el login esté funcionando correctamente
 async function loginDefault() {
     const token = await login(process.env.API_USERNAME, process.env.API_PASSWORD);
-    console.log("Token después de loginDefault:", token); // Verificar que el token se obtiene correctamente
-    return token;
+    console.log("Token después de loginDefault:", token); 
   };
   
 
-// Función de login por defecto utilizando credenciales en el archivo .env
 async function apiRequest(method, endpoint, data = null, customToken = null) {
-    const authToken = customToken || token; // Usa el token del customToken si se pasa, o el token global
+    const authToken = customToken || token; 
     if (!authToken) {
         const newToken = await loginDefault();
         return apiRequest(method, endpoint, data, newToken);
@@ -42,7 +40,7 @@ async function apiRequest(method, endpoint, data = null, customToken = null) {
         method,
         url: `${BASE_URL}${endpoint}`,
         data,
-        headers: { 'x-token': authToken }, // Enviar el token en la cabecera
+        headers: { 'x-token': authToken }, 
       });
 
       if (response.data && Object.keys(response.data).length === 0) {
