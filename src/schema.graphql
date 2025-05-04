@@ -1,0 +1,68 @@
+type Documento {
+  id_documento: ID!
+  nombre: String!
+  tipo: String
+  fuente_origen: String
+  descripcion: String
+  importancia: String
+  anio_publicacion: Int
+  enlace: String
+  alcance: String
+  concepto_basico: String
+  aplicacion: String
+  cpe: String
+  jerarquia: String
+  isfavorite: Boolean
+  vistas: Int
+  palabras_clave_procesadas: String
+  usuario: Usuario
+  versiones: [VersionDocumento]
+  fecha_creacion: String
+  fecha_actualizacion: String
+}
+
+type VersionDocumento {
+  id: ID!
+  nombre: String!
+  tipo: String
+  fuente_origen: String
+  descripcion: String
+  importancia: String
+  anio_publicacion: Int
+  enlace: String
+  alcance: String
+  concepto_basico: String
+  aplicacion: String
+  cpe: String
+  jerarquia: String
+  isfavorite: Boolean
+  vistas: Int
+  palabras_clave_procesadas: String
+  isVersion: Boolean
+  fecha_version: String
+  numero_version: Int
+  documento: Documento
+  usuario: Usuario
+}
+
+type Usuario {
+  id_usuario: ID!
+  correo: String!
+  tipo: String
+}
+
+
+
+type Mutation {
+  login(correo: String!, contrasenia: String!): AuthResponse
+  crearDocumento(nombre: String!, tipo: String!, descripcion: String!): Documento
+  actualizarDocumento(id: ID!, nombre: String, tipo: String, descripcion: String): Documento
+  eliminarDocumento(id: ID!): Boolean
+}
+
+
+type AuthResponse {
+  token: String!
+  usuario: Usuario!
+}
+
