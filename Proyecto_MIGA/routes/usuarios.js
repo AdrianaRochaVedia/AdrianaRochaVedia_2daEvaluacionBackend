@@ -1,17 +1,15 @@
 /*
-    Rutas de Usuarios / Auth
-    host + /api/auth
+    Rutas de Usuarios / Usuarios
+    host + /api/usuarios
 */
 
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { crearUsuario, loginUsuario, revalidarToken, getUsuario, getUsuarios } = require('../controllers/auth');
+const { crearUsuario, loginUsuario, revalidarToken, getUsuario, getUsuarios } = require('../controllers/usuarios');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 const router = Router();
-
-
 
 router.post(
     '/new',
@@ -31,7 +29,7 @@ router.post(
         check('contrasenia', 'La contraseña debe tener al menos 6 caracteres').isLength({ min: 6 }),
         validarCampos
     ],
-     loginUsuario
+    loginUsuario
 );
 
 //Revalidar token
@@ -42,9 +40,7 @@ router.get('/renew',validarJWT, revalidarToken);
 router.get('/:id', validarJWT, getUsuario);
 
 // Obtener todos los usuarios (requiere token)
-router.get('/', validarJWT, getUsuarios);
+router.get('/',  getUsuarios);
 
-
-//Para crear un nuevo usuario post
 
 module.exports = router;

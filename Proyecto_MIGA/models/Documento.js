@@ -10,6 +10,10 @@ const Documento = sequelize.define('Documento', {
     autoIncrement: true,
     allowNull: false
   },
+  nombre: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  }, // Nombre del documento
   tipo: {
     type: DataTypes.STRING(255),
     allowNull: false

@@ -2,10 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
-
-// Función para validar el formato de un ID de MongoDB
-// const esObjectIdValido = (id) => mongoose.Types.ObjectId.isValid(id);
-
+const decode = require('jsonwebtoken/decode');
 
 // Obtener todos los usuarios activos
 const getUsuarios = async (req, res) => {
@@ -46,11 +43,12 @@ const crearUsuario = async (req, res) => {
       });
   
       const token = await generarJWT(usuario.id_usuario, usuario.correo);
-  
+      console.log(decode(token, { complete: true }));
       res.status(201).json({
         ok: true,
         uid: usuario.id_usuario,
         correo: usuario.correo,
+      
         token
       });
     } catch (err) {
@@ -76,7 +74,8 @@ const loginUsuario = async (req, res) => {
 
       //Generar el token
       const token = await generarJWT(usuario.id_usuario, usuario.correo);
-  
+      console.log(decode(token, { complete: true }));
+      
       res.json({
         ok: true,
         uid: usuario.id_usuario,
@@ -88,9 +87,6 @@ const loginUsuario = async (req, res) => {
       res.status(500).json({ ok: false, msg: 'Hable con el administrador' });
     }
   };
-
-
-// const esObjectIdValido = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // Obtener un usuario por ID
 const getUsuario = async (req, res) => {
@@ -110,12 +106,35 @@ const getUsuario = async (req, res) => {
   };
   
   // Revalidar token
-  const revalidarToken = async (req, res) => {
-    const { uid, correo } = req;  // name proviene de tu middleware de validación JWT
-    const token = await generarJWT(uid, correo);
-    res.json({ ok: true, uid, correo, token });
-  };
+  // const revalidarToken = async (req, res) => {
+  //   const { uid, correo } = req;  // name proviene de tu middleware de validación JWT
+  //   const token = await generarJWT(uid, correo);
+  //   res.json({ ok: true, uid, correo, token });
+  // };
   
+  const revalidarToken = async (req, res) => {
+    const { uid, correo } = req; // Accede directamente desde req
+
+    if (!uid || !correo) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'Faltan datos del usuario'
+        });
+    }
+
+    try {
+        const token = await generarJWT(uid, correo);
+        res.json({ ok: true, uid, correo, token });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al generar el token'
+        });
+    }
+};
+
+
   module.exports = {
     getUsuarios,
     crearUsuario,

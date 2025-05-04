@@ -9,6 +9,7 @@ const VersionDocumento = sequelize.define('VersionDocumento', {
     primaryKey: true,
     autoIncrement: true
   },
+  nombre: DataTypes.STRING(255), // Nombre del documento
   tipo: DataTypes.STRING(255),
   fuente_origen: DataTypes.STRING(255),
   descripcion: DataTypes.TEXT,
