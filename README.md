@@ -69,21 +69,21 @@ En el body :
 
 ### 2. Para la búsqueda de documentos por nombre
 
-En el body :  
-    {  
-        "query": "query { buscarDocumentosPorNombre(nombre: \"Guía de Seguridad Cibernética\") { id_documento nombre tipo } }"  
-    }  
+En el body :    
+    {    
+        "query": "query { buscarDocumentosPorNombre(nombre: \"Guía de Seguridad Cibernética\") { id_documento nombre tipo } }"   
+    }    
 
-En el header:  
-    key : x-token  
-    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImNvcnJlbyI6ImVqZW1wbG8xQGNvcnJlby5jb20iLCJpYXQiOjE3NDYzNzc3OTMsImV4cCI6MTc0Njk4MjU5M30.gSWbH6bTVk0Mbv9i9r8bA1CQC7tFj1r3nwbqO6AXE9U  
+En el header:    
+        key : x-token  
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImNvcnJlbyI6ImVqZW1wbG8xQGNvcnJlby5jb20iLCJpYXQiOjE3NDYzNzc3OTMsImV4cCI6MTc0Njk4MjU5M30.gSWbH6bTVk0Mbv9i9r8bA1CQC7tFj1r3nwbqO6AXE9U    
 
-#### Repuesta
-{  
-    "data": {  
-        "login": {  
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImNvcnJlbyI6ImVqZW1wbG8xQGNvcnJlby5jb20iLCJpYXQiOjE3NDYzNzc3OTMsImV4cCI6MTc0Njk4MjU5M30.gSWbH6bTVk0Mbv9i9r8bA1CQC7tFj1r3nwbqO6AXE9U"
-        }  
-    }  
-}  
+#### Repuesta  
+    {   
+        "data": {  
+            "login": {    
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImNvcnJlbyI6ImVqZW1wbG8xQGNvcnJlby5jb20iLCJpYXQiOjE3NDYzNzc3OTMsImV4cCI6MTc0Njk4MjU5M30.gSWbH6bTVk0Mbv9i9r8bA1CQC7tFj1r3nwbqO6AXE9U"  
+            }    
+        }    
+    }   
 
