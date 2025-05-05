@@ -102,7 +102,7 @@ En el header:
     │ ├── apiClient.js
     │ └── server.js
     ├── test/
-    ├── resolvers.test.js
+    │ └── resolvers.test.js
     ├── .env
     ├── .gitignore
     ├── package-lock.json
