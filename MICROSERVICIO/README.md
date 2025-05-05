@@ -101,6 +101,8 @@ En el header:
     │ ├── schema.graphql
     │ ├── apiClient.js
     │ └── server.js
+    ├── test/
+    ├── resolvers.test.js
     ├── .env
     ├── .gitignore
     ├── package-lock.json
@@ -136,10 +138,13 @@ Configura el servidor GraphQL con:
 - Formateo de errores  
 - Contexto para pasar información de autenticación a los resolvers  
 
-#### 5. .env   
+#### 5. resolvers.test.js 
+Contiene las pruebas unitarias para los resolvers del microservicio. En este archivo, se implementan los casos de prueba para verificar el   comportamiento de la función buscarDocumentosPorNombre bajo diferentes condiciones (cuando la búsqueda tiene éxito, cuando no se encuentran   documentos, y cuando ocurre un error).  
+
+#### 6. .env   
 Este archivo almacena las variables de entorno de configuración, como la URL base del API del proyecto integrador y las credenciales de autenticación. Su uso permite desacoplar la configuración del código, facilitando la gestión en diferentes entornos.  
 
-#### 6. .gitignore    
+#### 7. .gitignore    
 Este archivo especifica los archivos y directorios que deben ser ignorados por el sistema de control de versiones Git, como el directorio de dependencias (node_modules/) y archivos de configuración local.   
 
 ## CONSIDERACIONES
